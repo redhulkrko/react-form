@@ -31,7 +31,7 @@ router.get('/:id', (req, res) => {
 // @route GET api/movies
 // @trailer add/save movie
 // @access Public
-router.post('/', upload.array('file'), (req, res) => {
+router.post('/', upload.array('poster'), (req, res) => {
 
   var filenames = req.files.map(function(file) {
     return file.path; // or file.originalname

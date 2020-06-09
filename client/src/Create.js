@@ -1,7 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import "react-dropzone-uploader/dist/styles.css";
 import Dropzone from "react-dropzone-uploader";
 import axios from 'axios';
+
+import {
+  Clear
+} from "@material-ui/icons";
 
 const movieData = { title: "" };
 
@@ -17,10 +21,9 @@ const Submit = props => {
     const headers = "multipart/form-data";
     const formData = new FormData();
     formData.set("title", movie.title);
-    let items = files.map(fileItem => fileItem.file);
-    for (let img in items[0]) {
-      formData.append("posters", items[0][img]);
-    }
+    
+    
+    files.map(fileItem => formData.append("poster", fileItem.file));
 
     console.log(Array.from(formData));
     axios.post(apiUrl, formData, headers)
@@ -40,6 +43,34 @@ const Submit = props => {
     </div>
   );
 };
+
+const Preview = ({ meta, fileWithMeta }) => {
+  const { previewUrl, name, status } = meta
+  const { uploadPercentage, setUploadPercentage} = useContext(AppContext);
+  const timeout = useRef()
+  console.log({status});
+  useEffect(() => {
+      const time = 10000;
+      if (uploadPercentage < 100) {
+        timeout.current = setTimeout(() => {
+          setUploadPercentage(uploadPercentage => uploadPercentage + 1);
+        }, time / 1000);
+      }
+  
+      return () => clearTimeout(timeout.current);
+  }, [uploadPercentage]);
+
+  return (
+    <div className="dzu-previewContainer">
+      <img class="dzu-previewImage" src={previewUrl} alt={name} title={name}></img>
+      <progress max="100" value={uploadPercentage}></progress>
+      {uploadPercentage === 100 ? (
+      <Clear onClick={fileWithMeta.remove} />
+      ) : ('')}
+    </div>
+  )
+}
+
 
 const Layout = ({
   input,
@@ -73,7 +104,6 @@ const Layout = ({
 };
 
 const CustomLayout = () => {
-  const getUploadParams = () => ({ url: "http://localhost:5000/api/movies/" });
 
   // const handleSubmit = (files, allFiles) => {
   //   console.log({ movie });
@@ -83,20 +113,24 @@ const CustomLayout = () => {
 
   const [movie, setMovie] = useState(movieData);
   const [showLoading, setShowLoading] = useState(false);
+  const [uploadPercentage, setUploadPercentage] = useState(0);
 
 
   const values = {
     movie,
     setMovie,
     showLoading,
-    setShowLoading
+    setShowLoading,
+    uploadPercentage,
+    setUploadPercentage
   };
 
   return (
     <AppContext.Provider value={values}>
       <Dropzone
-        getUploadParams={getUploadParams}
+        autoUpload={false}
         SubmitButtonComponent={Submit}
+        PreviewComponent={Preview}
         LayoutComponent={Layout}
         onSubmit={() => {
           console.log("After submit?");
