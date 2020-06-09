@@ -1,0 +1,19 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.dzu-previewContainer {
+  padding: 30px 3%;
+  flex-direction: column;
+}
+
+.dzu-previewImage {
+  max-height: 140px;
+  max-width: 220px;
+  border-radius: 6px;
+}
+
+.dzu-previewStatusContainer {
+  margin: 15px 0;
+}

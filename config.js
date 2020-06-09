@@ -1,0 +1,6 @@
+
+  const mongoose = require('mongoose');
+const connection = "mongodb+srv://testUser:silver990@cluster0-3ruts.mongodb.net/data?retryWrites=true&w=majority";
+mongoose.connect(connection,{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+    .then(() => console.log("Database Connected Successfully"))
+    .catch(err => console.log(err));
