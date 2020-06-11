@@ -175,9 +175,9 @@ const Create = () => {
 
   return (
     <>
-      <MainContainer>
-        <MovieForm>
-          <MovieInfo>
+      <div>
+        <div>
+          <div>
             {showLoading && <span className="sr-only">Loading...</span>}
             <h2 className="title">Add Movie</h2>
             <div className="wrapper">
@@ -238,13 +238,13 @@ const Create = () => {
                 placeholder="Trailer URL"
               />
             </div>
-          </MovieInfo>
+          </div>
 
-          <MoviePosters>
+          <div>
             <MyUploader />
-          </MoviePosters>
-        </MovieForm>
-      </MainContainer>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
